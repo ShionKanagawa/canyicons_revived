@@ -11,7 +11,7 @@ permissions:
 jobs:
   optimize-svgs:
     runs-on: ubuntu-latest
-    if: github.repository == 'LawnchairLauncher/lawnicons'
+    if: github.repository == 'LawnchairLauncher/canyicons'
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

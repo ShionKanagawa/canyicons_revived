@@ -1,0 +1,209 @@
+package app.lawnchair.canyicons.ui.components.home.search
+
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.Icon
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
+import app.lawnchair.canyicons.R
+import app.lawnchair.canyicons.model.IconInfo
+import app.lawnchair.canyicons.model.SearchMode
+import app.lawnchair.canyicons.model.getFirstLabelAndComponent
+import app.lawnchair.canyicons.ui.components.home.IconInfoSheet
+import app.lawnchair.canyicons.ui.components.home.IconPreview
+import kotlinx.collections.immutable.ImmutableList
+
+@Composable
+fun SearchContents(
+    searchTerm: String,
+    searchMode: SearchMode,
+    onModeChange: (SearchMode) -> Unit,
+    iconInfo: ImmutableList<IconInfo>,
+    modifier: Modifier = Modifier,
+    onSendResult: (IconInfo) -> Unit = {},
+) {
+    Column(
+        modifier = modifier,
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier
+                .horizontalScroll(rememberScrollState())
+                .padding(start = 16.dp, end = 16.dp, top = 8.dp),
+        ) {
+            FilterChip(
+                leadingIcon = {
+                    AnimatedVisibility(searchMode == SearchMode.LABEL) {
+                        Icon(
+                            imageVector = Icons.Rounded.Check,
+                            contentDescription = null,
+                        )
+                    }
+                },
+                selected = searchMode == SearchMode.LABEL,
+                onClick = {
+                    onModeChange(SearchMode.LABEL)
+                },
+                label = {
+                    Text(text = stringResource(R.string.name))
+                },
+            )
+            FilterChip(
+                leadingIcon = {
+                    AnimatedVisibility(searchMode == SearchMode.COMPONENT) {
+                        Icon(
+                            imageVector = Icons.Rounded.Check,
+                            contentDescription = null,
+                        )
+                    }
+                },
+                selected = searchMode == SearchMode.COMPONENT,
+                onClick = {
+                    onModeChange(SearchMode.COMPONENT)
+                },
+                label = {
+                    Text(text = stringResource(id = R.string.component))
+                },
+            )
+            FilterChip(
+                leadingIcon = {
+                    AnimatedVisibility(searchMode == SearchMode.DRAWABLE) {
+                        Icon(
+                            imageVector = Icons.Rounded.Check,
+                            contentDescription = null,
+                        )
+                    }
+                },
+                selected = searchMode == SearchMode.DRAWABLE,
+                onClick = {
+                    onModeChange(SearchMode.DRAWABLE)
+                },
+                label = {
+                    Text(text = stringResource(id = R.string.drawable))
+                },
+            )
+        }
+        Crossfade(
+            targetState = iconInfo.size,
+            label = "On item count modified",
+        ) { count ->
+            when (count) {
+                1 -> {
+                    IconInfoListItem(iconInfo)
+                }
+                0 -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(PaddingValues(16.dp)),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Text(
+                            textAlign = TextAlign.Center,
+                            text = stringResource(R.string.no_items_found, searchTerm),
+                        )
+                    }
+                }
+
+                else -> {
+                    Crossfade(
+                        targetState = iconInfo,
+                        label = "Item changed",
+                        animationSpec = tween(50),
+                    ) { iconInfo ->
+                        LazyVerticalGrid(
+                            columns = GridCells.Adaptive(minSize = 80.dp),
+                            contentPadding = PaddingValues(16.dp),
+                        ) {
+                            items(
+                                items = iconInfo,
+                                contentType = { "icon_preview" },
+                            ) {
+                                IconPreview(
+                                    iconInfo = it,
+                                    onSendResult = onSendResult,
+                                    iconBackground = MaterialTheme.colorScheme.surfaceVariant,
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun IconInfoListItem(iconInfo: ImmutableList<IconInfo>) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(PaddingValues(16.dp)),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+    ) {
+        val it = iconInfo[0]
+        val isIconInfoAppfilterShown = remember { mutableStateOf(false) }
+
+        ListItem(
+            headlineContent = { Text(it.getFirstLabelAndComponent().label) },
+            supportingContent = { Text(it.getFirstLabelAndComponent().componentName) },
+            leadingContent = {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier
+                        .padding(all = 8.dp)
+                        .clip(shape = CircleShape)
+                        .size(48.dp),
+                ) {
+                    Icon(
+                        painter = painterResource(id = it.id),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(0.6f),
+                    )
+                }
+            },
+            modifier = Modifier
+                .clip(RoundedCornerShape(16.dp))
+                .clickable(onClick = { isIconInfoAppfilterShown.value = true }),
+        )
+        AnimatedVisibility(isIconInfoAppfilterShown.value) {
+            IconInfoSheet(
+                iconInfo = it,
+            ) {
+                isIconInfoAppfilterShown.value = it
+            }
+        }
+    }
+}

@@ -31,10 +31,10 @@ val versionDisplayName = "$version ${if (isReleaseBuild) "" else devReleaseName}
 
 android {
     compileSdk = 35
-    namespace = "app.lawnchair.lawnicons"
+    namespace = "app.lawnchair.canyicons"
 
     defaultConfig {
-        applicationId = "app.lawnchair.lawnicons"
+        applicationId = "app.lawnchair.canyicons"
         minSdk = 26
         targetSdk = compileSdk
         versionCode = 14
@@ -75,7 +75,7 @@ android {
     productFlavors {
         create("app") {
             dimension = "product"
-            resValue("string", "apps_name", "Lawnicons")
+            resValue("string", "apps_name", "Canyicons")
         }
     }
     sourceSets.getByName("app") {
@@ -101,7 +101,7 @@ android {
     applicationVariants.all {
         outputs.all {
             (this as? ApkVariantOutputImpl)?.outputFileName =
-                "Lawnicons $versionName v${versionCode}_${buildType.name}.apk"
+                "Canyicons $versionName v${versionCode}_${buildType.name}.apk"
         }
     }
 }
