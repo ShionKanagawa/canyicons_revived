@@ -753,8 +753,8 @@
   <item component="ComponentInfo{com.coloros.weather2/com.oplus.weather.main.view.WeatherMainActivity}" drawable="weather" name="Weather" />
   <item component="ComponentInfo{com.coloros.weather2/com.coloros.weather.main.view.WeatherMainActivity}" drawable="weather" name="Weather" />
   <item component="ComponentInfo{com.coloros.weather2/com.coloros.weather.OppoMainActivity}" drawable="weather" name="Weather" />
-  <item component="ComponentInfo{com.miui.weather2/com.miui.weather2.ActivityWeatherCycle}" drawable="weather" name="Weather" />
-  <item component="ComponentInfo{com.miui.weather2/com.miui.weather2.ActivityWeatherMain}" drawable="weather" name="Weather" />
+  <item component="ComponentInfo{com.miui.weather2/com.miui.weather2.ActivityWeatherCycle}" drawable="mi_weather" name="Weather" />
+  <item component="ComponentInfo{com.miui.weather2/com.miui.weather2.ActivityWeatherMain}" drawable="mi_weather" name="Weather" />
   <item component="ComponentInfo{com.meizu.flyme.weather/com.hy.weather.mz.modules.home.WeatherMainActivity}" drawable="weather" name="Weather" />
   <item component="ComponentInfo{org.secuso.privacyfriendlyweather/org.secuso.privacyfriendlyweather.activities.SplashActivity}" drawable="weather" name="Weather (PFA)" />
   <item component="ComponentInfo{rikka.safetynetchecker/rikka.safetynetchecker.main.MainActivity}" drawable="yasnac" name="YASNAC" />
